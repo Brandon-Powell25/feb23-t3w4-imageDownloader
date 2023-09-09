@@ -49,13 +49,13 @@ function downloadPokemonPicture(targetId = getRandomPokemonId()){
 
 // Generate a random number or use a user-provides number
 function getRandomPokemonId(){
-    return Math.floor(Math.random() * 1010) = 1
+    return Math.floor(Math.random() * 1010) + 1
 }
 
 
 // Retireve Pokemon data fpr that number
 // Retrieve the image URL from Pokemon data
-async function getRandomPokemonUrl(targetId = getRandomPokemonId()){
+async function getPokemonPictureUrl(targetId = getRandomPokemonId()){
     
     // Retrieve the API data
     let response = await fetch("https://pokeapi.co/api/v2/pokemon/" + targetId).catch(error => {
@@ -117,6 +117,6 @@ async function savePokemonPictureToDisk(targetUrl, targetDownloadFilename, targe
 module.exports = {
     downloadPokemonPicture,
     savePokemonPictureToDisk,
-    getRandomPokemonUrl,
+    getPokemonPictureUrl,
     getRandomPokemonId
 }
