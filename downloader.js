@@ -17,7 +17,7 @@ const {finished} = require("node:stream/promises");
 // Node file & directory path helper system
 // /folder/folder/filename.png
 // \folder\folder\filename.png
-const path = requie("node:path");
+const path = require("node:path");
 
 
 function downloadPokemonPicture(targetId = getRandomPokemonId()){
@@ -27,14 +27,21 @@ function downloadPokemonPicture(targetId = getRandomPokemonId()){
 
          // Step 1: get the image URL
          let newUrl = await getPokemonPictureUrl(targetId);
+
+         // Step 1b: Get the Pokemon name
+         let pokemonName = await fetch("https://pokeapi.co/api/v2/pokemon/" + targetId).then(async (response) => {
+            return await response.json();
+         }).then(json => {
+            return json.name;
+         })
         
          // Step 2: do the download
          let savedFileLocation = await savePokemonPictureToDisk(newUrl, "ExampleImage.png", "storage");
          // return savedFileLocation;
          resovle(savedFileLocation);
-         
+
        } catch (error) {
-        reject(error)
+            reject(error)
        }
 
     });
@@ -97,7 +104,7 @@ async function savePokemonPictureToDisk(targetUrl, targetDownloadFilename, targe
     let fileDownloadStream = fs.createWriteStream(fullFileDestination);
 
     //        get data as bytes from web request --- pipe the bytes into the hard drive
-    await finished(Readable.fromWeb(imageData.body)).pipe(fileDownloadStream).catch(error => {
+    await finished(Readable.fromWeb(imageData.body).pipe(fileDownloadStream)).catch(error => {
         throw new Error("Failed to save content to disk");
     });
     
