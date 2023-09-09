@@ -8,7 +8,7 @@ const {mkdir} = require("node:fs/promises");
 
 // Streaming data, safer than traditional file saving/downloading/etc
 // This is synchronous, so we wait and it is blocking
-const {Readable} = require("node:stream");
+const { Readable } = require("node:stream");
 
 // wait for streaming to finish, this can take time so it should be a promise
 // but shouldn't be blocking, so it's a promise instead of async
@@ -80,12 +80,13 @@ async function savePokemonPictureToDisk(targetUrl, targetDownloadFilename, targe
     // Stream the image from the fetch to the computer
     let fileDownloadStream = fs.createWriteStream(fullFileDestination);
 
-    //        get data as bytes from web request ... pipe the bytes into the hard drive
+    //        get data as bytes from web request --- pipe the bytes into the hard drive
     await finished(Readable.fromWeb(imageData.body)).pipe(fileDownloadStream).catch(error => {
         throw new Error("Failed to save content to disk");
-    })
+    });
     
     // Return the saved image location
+    return fullFileDestination;
 
 }
 
