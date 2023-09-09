@@ -21,7 +21,23 @@ const path = requie("node:path");
 
 
 function downloadPokemonPicture(targetId = getRandomPokemonId()){
+    return new Promise(async (resovle, reject) => {
 
+       try {
+
+         // Step 1: get the image URL
+         let newUrl = await getPokemonPictureUrl(targetId);
+        
+         // Step 2: do the download
+         let savedFileLocation = await savePokemonPictureToDisk(newUrl, "ExampleImage.png", "storage");
+         // return savedFileLocation;
+         resovle(savedFileLocation);
+         
+       } catch (error) {
+        reject(error)
+       }
+
+    });
 }
 
 // Generate a random number or use a user-provides number
